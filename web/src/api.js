@@ -10,3 +10,8 @@ export const createProject = (body) => req("/projects", { method: "POST", body: 
 export const getProject    = (id) => req("/projects/" + id);
 export const updateProject = (id, body) => req("/projects/" + id, { method: "PATCH", body: JSON.stringify(body) });
 export const deleteProject = (id) => req("/projects/" + id, { method: "DELETE" });
+export const planTask = (projectId, body) =>
+  req(`/projects/${projectId}/tasks/plan`, {
+    method: "POST",
+    body: JSON.stringify(body),
+  });

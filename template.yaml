@@ -1,5 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
+Description: Task Manager CRUD + AI Planner (Bedrock)
+
 Globals:
   Function:
     Runtime: nodejs18.x
@@ -12,10 +14,34 @@ Globals:
       AllowOrigin: "'*'"
 
 Resources:
+  # ---- AI Planner (Bedrock) ----
+  CreateTaskPlanFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: generated/backend/ai-planner
+      Handler: createTaskPlan.handler
+      Environment:
+        Variables:
+          BEDROCK_MODEL_ID: anthropic.claude-3-haiku-20240307-v1:0
+      Policies:
+        - Statement:
+            Effect: Allow
+            Action:
+              - bedrock:InvokeModel
+              - bedrock:InvokeModelWithResponseStream
+            Resource: "*"
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /projects/{projectId}/tasks/plan
+            Method: post
+
+  # ---- CRUD (no DB; no deps) ----
   CreateProjectFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: generated/backend
+      CodeUri: generated/backend/crud
       Handler: createProject.handler
       Events:
         Api:
@@ -27,7 +53,7 @@ Resources:
   GetProjectFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: generated/backend
+      CodeUri: generated/backend/crud
       Handler: getProject.handler
       Events:
         Api:
@@ -39,7 +65,7 @@ Resources:
   ListProjectsFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: generated/backend
+      CodeUri: generated/backend/crud
       Handler: listProjects.handler
       Events:
         Api:
@@ -51,7 +77,7 @@ Resources:
   UpdateProjectFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: generated/backend
+      CodeUri: generated/backend/crud
       Handler: updateProject.handler
       Events:
         Api:
@@ -63,7 +89,7 @@ Resources:
   DeleteProjectFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: generated/backend
+      CodeUri: generated/backend/crud
       Handler: deleteProject.handler
       Events:
         Api:
@@ -71,12 +97,11 @@ Resources:
           Properties:
             Path: /projects/{projectId}
             Method: delete
-  
+
 Outputs:
   ApiId:
     Description: ID of the implicit API Gateway REST API
     Value: !Ref ServerlessRestApi
-
   ApiUrl:
     Description: Base URL for the REST API (Prod stage)
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"

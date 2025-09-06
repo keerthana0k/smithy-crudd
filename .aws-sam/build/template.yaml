@@ -1,5 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
+Description: Task Manager CRUD + AI Planner (Bedrock)
 Globals:
   Function:
     Runtime: nodejs18.x
@@ -11,6 +12,29 @@ Globals:
       AllowHeaders: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'''
       AllowOrigin: '''*'''
 Resources:
+  CreateTaskPlanFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: CreateTaskPlanFunction
+      Handler: createTaskPlan.handler
+      Environment:
+        Variables:
+          BEDROCK_MODEL_ID: anthropic.claude-3-haiku-20240307-v1:0
+      Policies:
+      - Statement:
+          Effect: Allow
+          Action:
+          - bedrock:InvokeModel
+          - bedrock:InvokeModelWithResponseStream
+          Resource: '*'
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /projects/{projectId}/tasks/plan
+            Method: post
+    Metadata:
+      SamResourceId: CreateTaskPlanFunction
   CreateProjectFunction:
     Type: AWS::Serverless::Function
     Properties:
