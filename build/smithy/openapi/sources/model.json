@@ -1,0 +1,250 @@
+{
+    "smithy": "2.0",
+    "shapes": {
+        "com.example.taskmanager#CreateProject": {
+            "type": "operation",
+            "input": {
+                "target": "com.example.taskmanager#CreateProjectInput"
+            },
+            "output": {
+                "target": "com.example.taskmanager#CreateProjectOutput"
+            },
+            "traits": {
+                "smithy.api#http": {
+                    "method": "POST",
+                    "uri": "/projects"
+                }
+            }
+        },
+        "com.example.taskmanager#CreateProjectInput": {
+            "type": "structure",
+            "members": {
+                "name": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#required": {}
+                    }
+                },
+                "description": {
+                    "target": "smithy.api#String"
+                }
+            }
+        },
+        "com.example.taskmanager#CreateProjectOutput": {
+            "type": "structure",
+            "members": {
+                "project": {
+                    "target": "com.example.taskmanager#ProjectItem",
+                    "traits": {
+                        "smithy.api#required": {}
+                    }
+                }
+            }
+        },
+        "com.example.taskmanager#DeleteProject": {
+            "type": "operation",
+            "input": {
+                "target": "com.example.taskmanager#DeleteProjectInput"
+            },
+            "output": {
+                "target": "com.example.taskmanager#DeleteProjectOutput"
+            },
+            "traits": {
+                "smithy.api#http": {
+                    "method": "DELETE",
+                    "uri": "/projects/{projectId}"
+                },
+                "smithy.api#idempotent": {}
+            }
+        },
+        "com.example.taskmanager#DeleteProjectInput": {
+            "type": "structure",
+            "members": {
+                "projectId": {
+                    "target": "com.example.taskmanager#ProjectId",
+                    "traits": {
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                }
+            }
+        },
+        "com.example.taskmanager#DeleteProjectOutput": {
+            "type": "structure",
+            "members": {
+                "ok": {
+                    "target": "smithy.api#Boolean"
+                }
+            }
+        },
+        "com.example.taskmanager#GetProject": {
+            "type": "operation",
+            "input": {
+                "target": "com.example.taskmanager#GetProjectInput"
+            },
+            "output": {
+                "target": "com.example.taskmanager#GetProjectOutput"
+            },
+            "traits": {
+                "smithy.api#http": {
+                    "method": "GET",
+                    "uri": "/projects/{projectId}"
+                },
+                "smithy.api#readonly": {}
+            }
+        },
+        "com.example.taskmanager#GetProjectInput": {
+            "type": "structure",
+            "members": {
+                "projectId": {
+                    "target": "com.example.taskmanager#ProjectId",
+                    "traits": {
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                }
+            }
+        },
+        "com.example.taskmanager#GetProjectOutput": {
+            "type": "structure",
+            "members": {
+                "project": {
+                    "target": "com.example.taskmanager#ProjectItem",
+                    "traits": {
+                        "smithy.api#required": {}
+                    }
+                }
+            }
+        },
+        "com.example.taskmanager#ListProjects": {
+            "type": "operation",
+            "input": {
+                "target": "smithy.api#Unit"
+            },
+            "output": {
+                "target": "com.example.taskmanager#ListProjectsOutput"
+            },
+            "traits": {
+                "smithy.api#http": {
+                    "method": "GET",
+                    "uri": "/projects"
+                },
+                "smithy.api#readonly": {}
+            }
+        },
+        "com.example.taskmanager#ListProjectsOutput": {
+            "type": "structure",
+            "members": {
+                "items": {
+                    "target": "com.example.taskmanager#ProjectItemList"
+                },
+                "nextToken": {
+                    "target": "smithy.api#String"
+                }
+            }
+        },
+        "com.example.taskmanager#ProjectId": {
+            "type": "string"
+        },
+        "com.example.taskmanager#ProjectItem": {
+            "type": "structure",
+            "members": {
+                "projectId": {
+                    "target": "com.example.taskmanager#ProjectId",
+                    "traits": {
+                        "smithy.api#required": {}
+                    }
+                },
+                "name": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#required": {}
+                    }
+                },
+                "description": {
+                    "target": "smithy.api#String"
+                },
+                "createdAt": {
+                    "target": "smithy.api#String"
+                },
+                "updatedAt": {
+                    "target": "smithy.api#String"
+                }
+            }
+        },
+        "com.example.taskmanager#ProjectItemList": {
+            "type": "list",
+            "member": {
+                "target": "com.example.taskmanager#ProjectItem"
+            }
+        },
+        "com.example.taskmanager#TaskManager": {
+            "type": "service",
+            "version": "2025-09-05",
+            "operations": [
+                {
+                    "target": "com.example.taskmanager#CreateProject"
+                },
+                {
+                    "target": "com.example.taskmanager#DeleteProject"
+                },
+                {
+                    "target": "com.example.taskmanager#GetProject"
+                },
+                {
+                    "target": "com.example.taskmanager#ListProjects"
+                },
+                {
+                    "target": "com.example.taskmanager#UpdateProject"
+                }
+            ],
+            "traits": {
+                "aws.protocols#restJson1": {}
+            }
+        },
+        "com.example.taskmanager#UpdateProject": {
+            "type": "operation",
+            "input": {
+                "target": "com.example.taskmanager#UpdateProjectInput"
+            },
+            "output": {
+                "target": "com.example.taskmanager#UpdateProjectOutput"
+            },
+            "traits": {
+                "smithy.api#http": {
+                    "method": "PATCH",
+                    "uri": "/projects/{projectId}"
+                }
+            }
+        },
+        "com.example.taskmanager#UpdateProjectInput": {
+            "type": "structure",
+            "members": {
+                "projectId": {
+                    "target": "com.example.taskmanager#ProjectId",
+                    "traits": {
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "name": {
+                    "target": "smithy.api#String"
+                },
+                "description": {
+                    "target": "smithy.api#String"
+                }
+            }
+        },
+        "com.example.taskmanager#UpdateProjectOutput": {
+            "type": "structure",
+            "members": {
+                "project": {
+                    "target": "com.example.taskmanager#ProjectItem",
+                    "traits": {
+                        "smithy.api#required": {}
+                    }
+                }
+            }
+        }
+    }
+}

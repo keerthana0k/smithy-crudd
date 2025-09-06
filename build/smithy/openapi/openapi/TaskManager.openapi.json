@@ -1,0 +1,245 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "TaskManager",
+        "version": "2025-09-05"
+    },
+    "paths": {
+        "/projects": {
+            "get": {
+                "operationId": "ListProjects",
+                "responses": {
+                    "200": {
+                        "description": "ListProjects 200 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ListProjectsResponseContent"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "operationId": "CreateProject",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateProjectRequestContent"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "CreateProject 200 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CreateProjectResponseContent"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/projects/{projectId}": {
+            "delete": {
+                "operationId": "DeleteProject",
+                "parameters": [
+                    {
+                        "name": "projectId",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "DeleteProject 200 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DeleteProjectResponseContent"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "operationId": "GetProject",
+                "parameters": [
+                    {
+                        "name": "projectId",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "GetProject 200 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetProjectResponseContent"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "UpdateProject",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateProjectRequestContent"
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "projectId",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "UpdateProject 200 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UpdateProjectResponseContent"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "CreateProjectRequestContent": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "name"
+                ]
+            },
+            "CreateProjectResponseContent": {
+                "type": "object",
+                "properties": {
+                    "project": {
+                        "$ref": "#/components/schemas/ProjectItem"
+                    }
+                },
+                "required": [
+                    "project"
+                ]
+            },
+            "DeleteProjectResponseContent": {
+                "type": "object",
+                "properties": {
+                    "ok": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "GetProjectResponseContent": {
+                "type": "object",
+                "properties": {
+                    "project": {
+                        "$ref": "#/components/schemas/ProjectItem"
+                    }
+                },
+                "required": [
+                    "project"
+                ]
+            },
+            "ListProjectsResponseContent": {
+                "type": "object",
+                "properties": {
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProjectItem"
+                        }
+                    },
+                    "nextToken": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ProjectItem": {
+                "type": "object",
+                "properties": {
+                    "projectId": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string"
+                    },
+                    "updatedAt": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "name",
+                    "projectId"
+                ]
+            },
+            "UpdateProjectRequestContent": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    }
+                }
+            },
+            "UpdateProjectResponseContent": {
+                "type": "object",
+                "properties": {
+                    "project": {
+                        "$ref": "#/components/schemas/ProjectItem"
+                    }
+                },
+                "required": [
+                    "project"
+                ]
+            }
+        }
+    }
+}

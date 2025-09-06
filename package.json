@@ -1,0 +1,11 @@
+{
+  "name": "my-crud-app",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "gen": "node ./src/index.js ./build/smithy/openapi/openapi/TaskManager.openapi.json"
+  },
+  "dependencies": {
+    "commander": "^12.1.0"
+  }
+}

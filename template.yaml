@@ -1,0 +1,82 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Globals:
+  Function:
+    Runtime: nodejs18.x
+    Timeout: 10
+    MemorySize: 256
+  Api:
+    Cors:
+      AllowMethods: "'GET,POST,PATCH,DELETE,OPTIONS'"
+      AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+      AllowOrigin: "'*'"
+
+Resources:
+  CreateProjectFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: generated/backend
+      Handler: createProject.handler
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /projects
+            Method: post
+
+  GetProjectFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: generated/backend
+      Handler: getProject.handler
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /projects/{projectId}
+            Method: get
+
+  ListProjectsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: generated/backend
+      Handler: listProjects.handler
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /projects
+            Method: get
+
+  UpdateProjectFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: generated/backend
+      Handler: updateProject.handler
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /projects/{projectId}
+            Method: patch
+
+  DeleteProjectFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: generated/backend
+      Handler: deleteProject.handler
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /projects/{projectId}
+            Method: delete
+  
+Outputs:
+  ApiId:
+    Description: ID of the implicit API Gateway REST API
+    Value: !Ref ServerlessRestApi
+
+  ApiUrl:
+    Description: Base URL for the REST API (Prod stage)
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"

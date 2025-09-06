@@ -1,0 +1,23 @@
+{
+  "version": "1.0",
+  "maven": {
+    "dependencies": [
+      "software.amazon.smithy:smithy-aws-traits:1.43.0",
+      "software.amazon.smithy:smithy-openapi:1.43.0"
+    ]
+  },
+  "sources": ["model/"],
+  "projections": {
+    "openapi": {
+      "transforms": [],
+      "plugins": {
+        "openapi": {
+          "service": "com.example.taskmanager#TaskManager",
+          "protocol": "aws.protocols#restJson1",
+          "version": "3.0.2",
+          "outputDirectory": "openapi"
+        }
+      }
+    }
+  }
+}

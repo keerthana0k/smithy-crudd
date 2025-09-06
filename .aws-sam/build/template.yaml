@@ -1,0 +1,87 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Globals:
+  Function:
+    Runtime: nodejs18.x
+    Timeout: 10
+    MemorySize: 256
+  Api:
+    Cors:
+      AllowMethods: '''GET,POST,PATCH,DELETE,OPTIONS'''
+      AllowHeaders: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'''
+      AllowOrigin: '''*'''
+Resources:
+  CreateProjectFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: CreateProjectFunction
+      Handler: createProject.handler
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /projects
+            Method: post
+    Metadata:
+      SamResourceId: CreateProjectFunction
+  GetProjectFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: GetProjectFunction
+      Handler: getProject.handler
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /projects/{projectId}
+            Method: get
+    Metadata:
+      SamResourceId: GetProjectFunction
+  ListProjectsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ListProjectsFunction
+      Handler: listProjects.handler
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /projects
+            Method: get
+    Metadata:
+      SamResourceId: ListProjectsFunction
+  UpdateProjectFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: UpdateProjectFunction
+      Handler: updateProject.handler
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /projects/{projectId}
+            Method: patch
+    Metadata:
+      SamResourceId: UpdateProjectFunction
+  DeleteProjectFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: DeleteProjectFunction
+      Handler: deleteProject.handler
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /projects/{projectId}
+            Method: delete
+    Metadata:
+      SamResourceId: DeleteProjectFunction
+Outputs:
+  ApiId:
+    Description: ID of the implicit API Gateway REST API
+    Value:
+      Ref: ServerlessRestApi
+  ApiUrl:
+    Description: Base URL for the REST API (Prod stage)
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod
